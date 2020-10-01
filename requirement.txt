@@ -1,5 +1,5 @@
 # Library dependencies for the python code.
-# pip install -r requirements.txt` before you can run this.
+# pip install -r requirements.txt before you can run this.
 
 python==3.7.4
 pandas==0.25.1
