@@ -1,0 +1,8 @@
+# Library dependencies for the python code.
+# pip install -r requirements.txt` before you can run this.
+
+python==3.7.4
+pandas==0.25.1
+numpy==1.16.5
+flask==1.1.1
+sklearn==0.21.3
