@@ -1,4 +1,4 @@
-# News_Category_Predictor
+# News Category Predictor
 
 * Created a basic Flask based News Categorization Web App. Utilized Randomforest, MultinomialNB & Logistic regression for news categorization. 
 * Used TF-IDF to transform text to vector.
