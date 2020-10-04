@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from joblib import dump
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -39,34 +40,31 @@ models = [
 ]
 for model in models:
   model_name = model.__class__.__name__
-  # create 5 models with different 20% test sets, and store their accuracies
   accuracies = cross_val_score(model, features, labels, scoring='accuracy')
 print("****************************")
 print(accuracies)
 print("****************************")
-
-pipeline_model = Pipeline(steps= [('model', LogisticRegression(random_state=0))])
+best_accuracies = max(accuracies)
+pos = 0
+for i in accuracies:
+  pos += 1
+  if (best_accuracies == i):
+    break
+best_model_position = pos -1
+best_model = models[best_model_position]
+print("****************************")
+print(best_model )
+print("****************************")
 
 #Split Data 
 X_train, X_test, y_train, y_test, indices_train, indices_test = train_test_split(features, labels, news_train.index, test_size=0.33, random_state=42)
 
+#Pipeline
+pipeline_model = Pipeline(steps= [('model', best_model)])
+
 #Train Algorithm
 pipeline_model.fit(X_train, y_train)
 
-# Loading Test data
-news_test = pd.read_csv('dataset/news_test.csv')
-test_features = pipeline_tfid.transform(news_test.Text.tolist())
-
-# Make Predictions
-y_pred_proba = pipeline_model.predict_proba(test_features)
-y_pred = pipeline_model.predict(test_features)
-y_pred_name =[]
-for cat_id in y_pred :
-    y_pred_name.append(id_to_category[cat_id])
-predicted_category = pd.DataFrame({
-        "Category": y_pred_name,
-        "News Text": news_test["Text"]
-    })
-print(predicted_category.head())
-
-predicted_category.to_csv('dataset/news_predicted.csv', index=False)
+# dump the pipeline model
+dump(pipeline_tfid, filename="pickle/news_tfid.joblib")
+dump(pipeline_model, filename="pickle/news_model.joblib")
